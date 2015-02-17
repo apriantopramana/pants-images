@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pants Image</title>
+</head>
+<body>
+    <style>
+        pants-images .image {
+            display: none;
+        }
+        .select {
+            cursor: pointer;
+            display: block;
+            padding: 12px 16px;
+            font-size: 1.1em;
+            /*border: 1px dotted transparent;
+            border-left-color: #eee;*/
+        }
+        .progress {
+            display: none;
+        }
+        .thumb {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .thumb .exit {
+            display: none;
+            position: absolute;
+            left: 88px;
+            cursor: pointer;
+            top: -13px;
+            border: 1px solid #eee;
+            padding: 5px 0;
+            background: #fff;
+            border-radius: 50%;
+        }
+        .thumb:hover .exit {
+            display: inherit;
+            z-index: 100;
+        }
+        .thumb:hover img {
+            box-shadow: 0 0 10px;
+        }
+    </style>
+
+    <pants-element name="pants-images">
+        <template>
+
+                <input class="image" name="{{ name }}" value="{{ value }}" type="file" multiple>
+                <a class="select">
+                    Select &nbsp;
+                    <i class="progress xn xn-spinner xn-lg xn-spin"></i>
+                </a>
+                <div class="row thumbnails"></div>
+
+        </template>
+
+        <script type="text/javascript">
+            pants('pants-images', {
+                    value: '',
+                    to: '',
+                    prefixs: '',
+                    bucket: 'uploader/images/',
+                    name: ''
+                })
+                .event('click a.select', function(){
+                    $(this).find('input[type="file"]').trigger('click');
+                })
+                .event('change input[type="file"]', function(){
+                    var selector = this.querySelector('input[type="file"]');
+                    var data = new FormData();
+                    var name = this.name;
+                    var that = this;
+
+                    $.each(selector.files, function(i, file) {
+                        data.append('files[]', file);
+                    });
+
+                    $.ajax({
+                        url: this.prefixs + this.to + '?' + 'base=' + this.prefixs + '&bucket=' + this.bucket,
+                        data: data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        type: 'POST',
+                        beforeSend: function (xhr) {
+                           $(that).find(".progress").show();
+                        },
+                    }).done(function(result){
+                        $(that).find(".progress").hide();
+
+                        var hiddenInput = '';
+                        var image = '';
+                        $.each(JSON.parse(result), function(k, v){
+                            image +=  '<div class="thumb span-3">'+
+                                          '<input type="hidden" name="'+name+'[]'+'" value="'+v.path+v.filename+'">'+
+                                          '<i class="exit xn xn-close" data="'+v.path+v.filename+'"></i>'+
+                                          '<img width="100" src="'+v.path+v.filename+'" alt="" />'+
+                                      '</div>';
+                        });
+
+                        $(that).find('.thumbnails').html(image);
+                    });
+                })
+                .register();
+
+                $(function(){
+                    //FIXME Todo: Delete file on directory
+                    $('pants-images').on('click', '.thumbnails .thumb .exit', function(){
+                        $('.thumb').remove();
+                    });
+                });
+        </script>
+    </pants-element>
+</body>
+</html>
