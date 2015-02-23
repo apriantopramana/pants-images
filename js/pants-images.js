@@ -35,6 +35,7 @@
         value: '',
         to: '',
         prefixs: '',
+        basebucket: '',
         bucket: 'uploader/images/',
         name: ''
     })
@@ -52,7 +53,7 @@
         });
 
         $.ajax({
-            url: this.prefixs + this.to + '?' + 'base=' + this.prefixs + '&bucket=' + this.bucket,
+            url: this.prefixs + this.to + '?' + 'base=' + this.basebucket + '&bucket=' + this.bucket,
             data: data,
             cache: false,
             contentType: false,
