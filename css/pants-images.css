@@ -32,3 +32,7 @@ pants-images .image {
 .thumb:hover img {
     box-shadow: 0 0 10px;
 }
+
+progress, .progress-value  {
+    display: none;
+}

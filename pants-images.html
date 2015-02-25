@@ -9,10 +9,11 @@
 <body>
     <pants-element name="pants-images">
         <template>
-            <input class="image" name="{{ name }}" value="{{ value }}" type="file" multiple>
+            <input class="image" name="" value="{{ value }}" type="file" multiple>
             <a class="select">
                 Select &nbsp;
-                <i class="progress xn xn-spinner xn-lg xn-spin"></i>
+                <progress value="0" max="100"></progress>
+                <span class="progress-value">0%</span>
             </a>
             <div class="row thumbnails"></div>
         </template>

@@ -59,11 +59,31 @@
             contentType: false,
             processData: false,
             type: 'POST',
-            beforeSend: function (xhr) {
-               $(that).find(".progress").show();
+            xhr: function() {
+                var myXhr = $.ajaxSettings.xhr();
+
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function(e){
+                        if (e.lengthComputable) {
+                            var progress = Math.round(e.loaded / e.total * 100)
+
+                            $(that).find('progress').attr({value:e.loaded,max:e.total});
+                            $(that).find('.progress-value').html(progress + '%');
+                        }
+                    }, false);
+                }
+                return myXhr;
+            },
+            beforeSend: function(){
+                $(that).find("progress").show();
+                $(that).find(".progress-value").show();
+            },
+            error: function(){
+                // Error Handling
             },
         }).done(function(result){
-            $(that).find(".progress").hide();
+            $(that).find("progress").hide();
+            $(that).find(".progress-value").hide();
 
             var hiddenInput = '';
             var image = '';
