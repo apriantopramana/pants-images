@@ -1,7 +1,7 @@
 <?php
 
 $base_dir  = 'file:///' . dirname(__DIR__);
-$path = $base_dir . '/' . $_GET['bucket'];
+$path = $base_dir . $_GET['bucket'];
 
 if (!file_exists($path)) {
     mkdir($path, 0766, true);
