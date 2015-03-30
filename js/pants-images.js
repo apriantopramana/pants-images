@@ -91,7 +91,7 @@
                 image +=  '<div class="thumb span-3">'+
                               '<input type="hidden" name="'+name+'[]'+'" value="'+v.path+v.filename+'">'+
                               '<i class="exit xn xn-close" data="'+v.path+v.filename+'"></i>'+
-                              '<img width="100" src="'+v.path+v.filename+'" alt="" />'+
+                              '<img width="100" src="'+v.base+'/'+v.path+v.filename+'" alt="" />'+
                           '</div>';
             });
 

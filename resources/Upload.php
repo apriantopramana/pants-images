@@ -1,6 +1,6 @@
 <?php
 
-$base_dir  = 'file:///' . dirname(__DIR__);
+$base_dir  = 'file:///' . dirname(dirname(__DIR__));
 $path = $base_dir . '/' . $_GET['bucket'];
 
 if (!file_exists($path)) {
@@ -10,10 +10,13 @@ if (!file_exists($path)) {
 $uploaded = array();
 foreach ($_FILES['files']['name'] as $k => $filename) {
     $tmp_file = $_FILES['files']['tmp_name'][$k];
-    move_uploaded_file($tmp_file, $path.$filename);
+    $filename = md5($tmp_file);
+
+    $upload = move_uploaded_file($tmp_file, $path.$filename);
 
     $uploaded[] = array(
-        'path' => $_GET['base'].$_GET['bucket'],
+        'base' => $_GET['base'],
+        'path' => $_GET['bucket'],
         'filename' => $filename
     );
 }
